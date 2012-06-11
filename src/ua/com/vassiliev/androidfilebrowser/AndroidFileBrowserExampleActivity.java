@@ -14,7 +14,7 @@ public class AndroidFileBrowserExampleActivity extends Activity {
 	private final String LOGTAG = "AndroidFileBrowserExampleActivity";
 	
 	private final int REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL = 1;
-	//Arbitrary constant to disciminate against values returned to onActivityResult
+	//Arbitrary constant to discriminate against values returned to onActivityResult
 	// as requestCode
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,11 +32,10 @@ public class AndroidFileBrowserExampleActivity extends Activity {
         				activityForButton,
         				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.class
         				);
-        		fileExploreIntent.putExtra(
-        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.intentDirectoryParameter, 
-        				"/"
-        				//Use Environment.getExternalStorageDirectory() for SD card/storage directory. In emulator connect SD image for this.
-        				);
+//        		fileExploreIntent.putExtra(
+//        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.startDirectoryParameter, 
+//        				"/sdcard"
+//        				);
         		startActivityForResult(
         				fileExploreIntent,
         				REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL
@@ -51,7 +50,7 @@ public class AndroidFileBrowserExampleActivity extends Activity {
 		if (requestCode == REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL) {
         	if(resultCode == this.RESULT_OK) {
         		String newDir = data.getStringExtra(
-        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.intentReturnDirectoryParameter);
+        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.returnDirectoryParameter);
         		Toast.makeText(
         				this, 
         				"Received path from file browser:"+newDir, 

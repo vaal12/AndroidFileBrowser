@@ -24,7 +24,7 @@
             android:name="ua.com.vassiliev.androidfilebrowser.FileBrowserActivity"
             android:label="File browser" >
             <intent-filter>
-                <action android:name="com.mburman.fileexplore.PICK_FOLDER"></action>
+                <action android:name="ua.com.vassiliev.androidfilebrowser.SELECT_DIRECTORY_ACTION"></action>
             </intent-filter>
             
         </activity>
