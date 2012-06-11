@@ -8,7 +8,9 @@ package ua.com.vassiliev.androidfilebrowser;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Collections;
 
 //Android imports 
 import android.app.Activity;
@@ -319,10 +321,13 @@ public class FileBrowserActivity extends Activity {
 				
 			}
 			
-			if(fList.length==0) {
+			if(fileList.size()==0) {
 				Log.d(LOGTAG, "This directory is empty");
 				fileList.add(0, 
 						new Item("Directory is empty", -1, true));
+			}
+			else {//sort non empty list
+				Collections.sort(fileList, new ItemFileNameComparator());
 			}
 
 //			if (!firstLvl) {
@@ -396,6 +401,13 @@ public class FileBrowserActivity extends Activity {
 			return file;
 		}
 	}
-
+	
+	private class ItemFileNameComparator implements Comparator<Item> {
+		@Override
+		public int compare(Item lhs, Item rhs) {
+			return lhs.file.toLowerCase().compareTo(rhs.file.toLowerCase());
+		}
+		
+	}//private class ItemComparator implements Comparator<Item> {
 
 }
