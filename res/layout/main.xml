@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.14"
+        
         android:text="@string/hello" />
 
     <Button
@@ -15,14 +15,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.18"
+        
         android:text="Start file browsing \nSelect directory" />
+    
+    
 
     <Button
-        android:id="@+id/startFileBrowserForFileButtonID"
+        android:id="@+id/startFileBrowser4FileButtonID"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.18"
+        
         android:text="Start file browsing \nSelect file" />
 
 </LinearLayout>

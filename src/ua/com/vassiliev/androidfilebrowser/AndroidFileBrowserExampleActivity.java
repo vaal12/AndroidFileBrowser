@@ -20,10 +20,13 @@ public class AndroidFileBrowserExampleActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.main);
         
-        final Button startBrowserButton = (Button) findViewById(R.id.startFileBrowserButtonID);
         final Activity activityForButton = this;
+        
+        final Button startBrowserButton = (Button) findViewById(R.id.startFileBrowserButtonID);
+        
         startBrowserButton.setOnClickListener(new View.OnClickListener() {
     		public void onClick(View v) {
     			Log.d(LOGTAG, "Start browsing button pressed");
@@ -44,7 +47,7 @@ public class AndroidFileBrowserExampleActivity extends Activity {
     		}//public void onClick(View v) {
     	});//startBrowserButton.setOnClickListener(new View.OnClickListener() {
         
-        final Button startBrowser4FileButton = (Button) findViewById(R.id.startFileBrowserForFileButtonID);
+        final Button startBrowser4FileButton = (Button) findViewById(R.id.startFileBrowser4FileButtonID);
         startBrowser4FileButton.setOnClickListener(new View.OnClickListener() {
     		public void onClick(View v) {
     			Log.d(LOGTAG, "StartFileBrowser4File button pressed");

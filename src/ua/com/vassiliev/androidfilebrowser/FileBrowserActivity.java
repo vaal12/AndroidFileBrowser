@@ -248,16 +248,17 @@ public class FileBrowserActivity extends Activity {
 							}//} else {//if(sel.canRead()) {
 						}//if (sel.isDirectory()) {
 						// Checks if 'up' was clicked
-						else if (chosenFile.equalsIgnoreCase("up") && !sel.exists()) {
-							//Below is not needed as there is a separate "Up" button
-//							loadDirectoryUp();
-//							loadFileList();
-//							adapter.notifyDataSetChanged();
-//							Log.d(TAG, path.getAbsolutePath());
-						}
+//						else if (chosenFile.equalsIgnoreCase("up") && !sel.exists()) {
+//							//Below is not needed as there is a separate "Up" button
+////							loadDirectoryUp();
+////							loadFileList();
+////							adapter.notifyDataSetChanged();
+////							Log.d(TAG, path.getAbsolutePath());
+//						}
 						// File picked
 						else {
-							Log.d(LOGTAG, "File select action is not defined");
+							Log.d(LOGTAG, "File selected:"+chosenFile);
+							returnFileFinishActivity(sel.getAbsolutePath());
 						}
 						//Log.d(TAG, "onClick finished");
 					}//public void onClick(DialogInterface dialog, int which) {
@@ -270,6 +271,16 @@ public class FileBrowserActivity extends Activity {
 		retIntent.putExtra(
 				returnDirectoryParameter, 
 				path.getAbsolutePath()
+		);
+		this.setResult(RESULT_OK, retIntent);
+		this.finish();
+	}//END private void returnDirectoryFinishActivity() {
+	
+	private void returnFileFinishActivity(String filePath) {
+		Intent retIntent = new Intent();
+		retIntent.putExtra(
+				returnFileParameter, 
+				filePath
 		);
 		this.setResult(RESULT_OK, retIntent);
 		this.finish();
