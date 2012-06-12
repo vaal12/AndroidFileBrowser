@@ -18,4 +18,11 @@
         android:layout_weight="0.18"
         android:text="Start file browsing \nSelect directory" />
 
+    <Button
+        android:id="@+id/startFileBrowserForFileButtonID"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.18"
+        android:text="Start file browsing \nSelect file" />
+
 </LinearLayout>

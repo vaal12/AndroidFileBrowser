@@ -41,12 +41,17 @@ public class FileBrowserActivity extends Activity {
 	//Intent Constants
 	public static final String INTENT_ACTION_SELECT_DIR = 
 			"ua.com.vassiliev.androidfilebrowser.SELECT_DIRECTORY_ACTION";
+	public static final String INTENT_ACTION_SELECT_FILE = 
+			"ua.com.vassiliev.androidfilebrowser.SELECT_FILE_ACTION";
 	
 	//Intent parameters constants
 	public static final String startDirectoryParameter = 
 			"ua.com.vassiliev.androidfilebrowser.directoryPath";
 	public static final String returnDirectoryParameter = 
 			"ua.com.vassiliev.androidfilebrowser.directoryPathRet";
+	public static final String returnFileParameter = 
+			"ua.com.vassiliev.androidfilebrowser.filePathRet";
+	
 	
 	
 	// Stores names of traversed directories
@@ -67,6 +72,7 @@ public class FileBrowserActivity extends Activity {
 	//Action constants
 	private static int currentAction = -1;
 	private static final int SELECT_DIRECTORY = 1;
+	private static final int SELECT_FILE = 2;
 	
 	
 	@Override
@@ -81,9 +87,12 @@ public class FileBrowserActivity extends Activity {
 		//Set action for this activity
 		Intent thisInt = this.getIntent();
 		currentAction = SELECT_DIRECTORY;//This would be a default action in case not set by intent
-		if(thisInt.getAction().equalsIgnoreCase(INTENT_ACTION_SELECT_DIR)) {
-			//Log.d(TAG, "SELEC DIR ACTION");
-			currentAction = SELECT_DIRECTORY;
+//		if(thisInt.getAction().equalsIgnoreCase(INTENT_ACTION_SELECT_DIR)) {
+//			currentAction = SELECT_DIRECTORY;
+//		}
+		if(thisInt.getAction().equalsIgnoreCase(INTENT_ACTION_SELECT_FILE)) {
+			Log.d(LOGTAG, "SELECT ACTION - SELECT FILE");
+			currentAction = SELECT_FILE;
 		}
 		
 		setInitialDirectory();
@@ -141,26 +150,32 @@ public class FileBrowserActivity extends Activity {
 	private void initializeButtons() {
 		Button upDirButton = (Button)this.findViewById(R.id.upDirectoryButton);
 		upDirButton.setOnClickListener(
-				new OnClickListener() {
-					public void onClick(View v) {
-						Log.d(LOGTAG, "onclick for upDirButton");
-						loadDirectoryUp();
-						loadFileList();
-						adapter.notifyDataSetChanged();
-						updateCurrentDirectoryTextView();
-					}
+			new OnClickListener() {
+				public void onClick(View v) {
+					Log.d(LOGTAG, "onclick for upDirButton");
+					loadDirectoryUp();
+					loadFileList();
+					adapter.notifyDataSetChanged();
+					updateCurrentDirectoryTextView();
 				}
-				);//upDirButton.setOnClickListener(
+			});//upDirButton.setOnClickListener(
 		
 		Button selectFolderButton = (Button)this.findViewById(R.id.selectCurrentDirectoryButton);
-		selectFolderButton.setOnClickListener(
+		if(currentAction == this.SELECT_DIRECTORY) {
+			selectFolderButton.setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
 						Log.d(LOGTAG, "onclick for selectFolderButton");
 						returnDirectoryFinishActivity();
 					}
-				}
-				);//upDirButton.setOnClickListener(
+				});//upDirButton.setOnClickListener(
+		} else {//if(currentAction == this.SELECT_DIRECTORY) {
+			selectFolderButton.setVisibility(View.GONE);
+			((TextView)this.findViewById(
+					R.id.currentDirectoryTextView)).setVisibility(View.GONE);
+		}//} else {//if(currentAction == this.SELECT_DIRECTORY) {
+		
+		
 	}
 	
 	private void loadDirectoryUp() {
@@ -195,9 +210,7 @@ public class FileBrowserActivity extends Activity {
 		((TextView)this.findViewById(
 				R.id.currentDirectoryTextView)).setText(
 				"Current directory:\n"+curDirString);
-		
-		
-	}
+	}//private void updateCurrentDirectoryTextView() {
 	
 	private void showToast(String message) {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -279,6 +292,9 @@ public class FileBrowserActivity extends Activity {
 					if(currentAction==SELECT_DIRECTORY) {
 						return (sel.isDirectory());
 					}
+					if(currentAction == SELECT_FILE) {
+						return true;
+					}
 					return (sel.isFile() || sel.isDirectory())
 							&& !sel.isHidden();
 				}//public boolean accept(File dir, String filename) {
@@ -305,7 +321,8 @@ public class FileBrowserActivity extends Activity {
 					}
 				} else {
 					//Log.d("FILE", fileList[i].file);
-					Log.d("FILE", fileList.get(i).file);
+					//Log.d("FILE", fileList.get(i).file);
+					//Nothing to do here - file drawable is already added
 				}
 				
 				fileList.add(i, 
@@ -317,10 +334,7 @@ public class FileBrowserActivity extends Activity {
 				Log.d("DIRECTORY", fileList.get(i).file);
 				Log.d(LOGTAG, "Drawable:"+ 
 						(new Integer(fileList.get(i).icon)).toString());
-
-				
 			}
-			
 			if(fileList.size()==0) {
 				Log.d(LOGTAG, "This directory is empty");
 				fileList.add(0, 
@@ -329,17 +343,6 @@ public class FileBrowserActivity extends Activity {
 			else {//sort non empty list
 				Collections.sort(fileList, new ItemFileNameComparator());
 			}
-
-//			if (!firstLvl) {
-//				Item temp[] = new Item[fileList.size() + 1];
-//				for (int i = 0; i < fileList.size(); i++) {
-//					temp[i + 1] = fileList.get(i);
-//				}
-//				temp[0] = new Item("Up", R.drawable.directory_up);
-//				//fileList = temp;
-//				fileList.add(0, 
-//						new Item("Up", R.drawable.directory_up));
-//			}
 		} else {
 			Log.e(LOGTAG, "path does not exist or cannot be read");
 		}
@@ -374,8 +377,9 @@ public class FileBrowserActivity extends Activity {
 				// add margin between image and text (support various screen
 				// densities)
 				int dp5 = (int) (5 * getResources().getDisplayMetrics().density + 0.5f);
+				int dp3 = (int) (3 * getResources().getDisplayMetrics().density + 0.5f);
 				//TODO: change next line for empty directory, so text will be centered
-				textView.setCompoundDrawablePadding(dp5);
+				textView.setCompoundDrawablePadding(dp3);
 				textView.setBackgroundColor(Color.LTGRAY);
 				return view;
 			}//public View getView(int position, View convertView, ViewGroup parent) {

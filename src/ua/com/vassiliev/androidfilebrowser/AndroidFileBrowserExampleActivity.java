@@ -13,7 +13,8 @@ public class AndroidFileBrowserExampleActivity extends Activity {
     /** Called when the activity is first created. */
 	private final String LOGTAG = "AndroidFileBrowserExampleActivity";
 	
-	private final int REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL = 1;
+	private final int REQUEST_CODE_PICK_DIR = 1;
+	private final int REQUEST_CODE_PICK_FILE = 2;
 	//Arbitrary constant to discriminate against values returned to onActivityResult
 	// as requestCode
     @Override
@@ -38,22 +39,43 @@ public class AndroidFileBrowserExampleActivity extends Activity {
 //        				);
         		startActivityForResult(
         				fileExploreIntent,
-        				REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL
+        				REQUEST_CODE_PICK_DIR
         				);
     		}//public void onClick(View v) {
     	});//startBrowserButton.setOnClickListener(new View.OnClickListener() {
+        
+        final Button startBrowser4FileButton = (Button) findViewById(R.id.startFileBrowserForFileButtonID);
+        startBrowser4FileButton.setOnClickListener(new View.OnClickListener() {
+    		public void onClick(View v) {
+    			Log.d(LOGTAG, "StartFileBrowser4File button pressed");
+    			Intent fileExploreIntent = new Intent(
+    					ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.INTENT_ACTION_SELECT_FILE,
+        				null,
+        				activityForButton,
+        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.class
+        				);
+//        		fileExploreIntent.putExtra(
+//        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.startDirectoryParameter, 
+//        				"/sdcard"
+//        				);
+        		startActivityForResult(
+        				fileExploreIntent,
+        				REQUEST_CODE_PICK_FILE
+        				);
+    		}//public void onClick(View v) {
+        });
+        
     }//public void onCreate(Bundle savedInstanceState) {
     
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		if (requestCode == REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL) {
+		if (requestCode == REQUEST_CODE_PICK_DIR) {
         	if(resultCode == this.RESULT_OK) {
         		String newDir = data.getStringExtra(
         				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.returnDirectoryParameter);
         		Toast.makeText(
         				this, 
-        				"Received path from file browser:"+newDir, 
+        				"Received DIRECTORY path from file browser:\n"+newDir, 
         				Toast.LENGTH_LONG).show(); 
 	        	
         	} else {//if(resultCode == this.RESULT_OK) {
@@ -62,7 +84,27 @@ public class AndroidFileBrowserExampleActivity extends Activity {
         				"Received NO result from file browser",
         				Toast.LENGTH_LONG).show(); 
         	}//END } else {//if(resultCode == this.RESULT_OK) {
-        }//if (requestCode == REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL) {
+        }//if (requestCode == REQUEST_CODE_PICK_DIR) {
+		
+		if (requestCode == REQUEST_CODE_PICK_FILE) {
+        	if(resultCode == this.RESULT_OK) {
+        		String newFile = data.getStringExtra(
+        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.returnFileParameter);
+        		Toast.makeText(
+        				this, 
+        				"Received FILE path from file browser:\n"+newFile, 
+        				Toast.LENGTH_LONG).show(); 
+	        	
+        	} else {//if(resultCode == this.RESULT_OK) {
+        		Toast.makeText(
+        				this, 
+        				"Received NO result from file browser",
+        				Toast.LENGTH_LONG).show(); 
+        	}//END } else {//if(resultCode == this.RESULT_OK) {
+        }//if (requestCode == REQUEST_CODE_PICK_FILE) {
+		
+		
+		
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
