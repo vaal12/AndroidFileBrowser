@@ -36,6 +36,9 @@ public class AndroidFileBrowserExampleActivity extends Activity {
         				activityForButton,
         				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.class
         				);
+    			//If the parameter below is not provided the Activity will try to start from sdcard(external storage),
+    			// if fails, then will start from roor "/"
+    			// Do not use "/sdcard" instead as base address for sdcard use Environment.getExternalStorageDirectory() 
 //        		fileExploreIntent.putExtra(
 //        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.startDirectoryParameter, 
 //        				"/sdcard"
@@ -67,6 +70,27 @@ public class AndroidFileBrowserExampleActivity extends Activity {
         				);
     		}//public void onClick(View v) {
         });
+        
+        final Button start4FileHideNonReadButton = 
+        		(Button) findViewById(R.id.startBrowse4FileHideNonReadButtonID);
+        start4FileHideNonReadButton.setOnClickListener(new View.OnClickListener() {
+    		public void onClick(View v) {
+    			Log.d(LOGTAG, "StartFileBrowser4File button pressed");
+    			Intent fileExploreIntent = new Intent(
+    					ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.INTENT_ACTION_SELECT_FILE,
+        				null,
+        				activityForButton,
+        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.class
+        				);
+    			fileExploreIntent.putExtra(
+    					ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.showCannotReadParameter, 
+    					false);
+        		startActivityForResult(
+        				fileExploreIntent,
+        				REQUEST_CODE_PICK_FILE
+        				);
+    		}//public void onClick(View v) {
+        });//start4FileHideNonReadButton.setOnClickListener(new View.OnClickListener() {
         
     }//public void onCreate(Bundle savedInstanceState) {
     
