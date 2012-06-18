@@ -4,6 +4,9 @@ package ua.com.vassiliev.androidfilebrowser;
 //	Version of Aug 13, 2011
 //  This version is taken from the FileExplore from Android File Shareing server project.
 
+//Project type now is Android library: 
+//  http://developer.android.com/guide/developing/projects/projects-eclipse.html#ReferencingLibraryProject
+
 //General Java imports 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -15,7 +18,7 @@ import java.util.Collections;
 //Android imports 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.ColorStateList;
+//import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
@@ -174,9 +177,7 @@ public class FileBrowserActivity extends Activity {
 			((TextView)this.findViewById(
 					R.id.currentDirectoryTextView)).setVisibility(View.GONE);
 		}//} else {//if(currentAction == this.SELECT_DIRECTORY) {
-		
-		
-	}
+	}//private void initializeButtons() {
 	
 	private void loadDirectoryUp() {
 		// present directory removed from list
