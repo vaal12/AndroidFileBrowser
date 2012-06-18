@@ -41,19 +41,21 @@ import ua.com.vassiliev.androidfilebrowser.R;
 
 
 public class FileBrowserActivity extends Activity {
-	//Intent Constants
+	//Intent Action Constants
 	public static final String INTENT_ACTION_SELECT_DIR = 
 			"ua.com.vassiliev.androidfilebrowser.SELECT_DIRECTORY_ACTION";
 	public static final String INTENT_ACTION_SELECT_FILE = 
 			"ua.com.vassiliev.androidfilebrowser.SELECT_FILE_ACTION";
 	
-	//Intent parameters constants
+	//Intent parameters names constants
 	public static final String startDirectoryParameter = 
 			"ua.com.vassiliev.androidfilebrowser.directoryPath";
 	public static final String returnDirectoryParameter = 
 			"ua.com.vassiliev.androidfilebrowser.directoryPathRet";
 	public static final String returnFileParameter = 
 			"ua.com.vassiliev.androidfilebrowser.filePathRet";
+	public static final String showCannotReadParameter = 
+			"ua.com.vassiliev.androidfilebrowser.showCannotRead";
 	
 	
 	
@@ -71,6 +73,8 @@ public class FileBrowserActivity extends Activity {
 	//private static final int DIALOG_LOAD_FILE = 1000;
 
 	ArrayAdapter<Item> adapter;
+	
+	private boolean showHiddenFilesAndDirs = true;
 	
 	//Action constants
 	private static int currentAction = -1;
@@ -97,6 +101,9 @@ public class FileBrowserActivity extends Activity {
 			Log.d(LOGTAG, "SELECT ACTION - SELECT FILE");
 			currentAction = SELECT_FILE;
 		}
+		
+		showHiddenFilesAndDirs = 
+				thisInt.getBooleanExtra(showCannotReadParameter, true);
 		
 		setInitialDirectory();
 		
@@ -174,8 +181,8 @@ public class FileBrowserActivity extends Activity {
 				});//upDirButton.setOnClickListener(
 		} else {//if(currentAction == this.SELECT_DIRECTORY) {
 			selectFolderButton.setVisibility(View.GONE);
-			((TextView)this.findViewById(
-					R.id.currentDirectoryTextView)).setVisibility(View.GONE);
+//			((TextView)this.findViewById(
+//					R.id.currentDirectoryTextView)).setVisibility(View.GONE);
 		}//} else {//if(currentAction == this.SELECT_DIRECTORY) {
 	}//private void initializeButtons() {
 	
@@ -295,20 +302,21 @@ public class FileBrowserActivity extends Activity {
 		}
 		fileList.clear();
 
-		// Checks whether path exists
 		if (path.exists() && path.canRead()) {
 			FilenameFilter filter = new FilenameFilter() {
 				public boolean accept(File dir, String filename) {
 					File sel = new File(dir, filename);
+					boolean showReadableFile = showHiddenFilesAndDirs || sel.canRead();
 					// Filters based on whether the file is hidden or not
 					if(currentAction==SELECT_DIRECTORY) {
-						return (sel.isDirectory());
+						return (sel.isDirectory() && showReadableFile);
 					}
 					if(currentAction == SELECT_FILE) {
-						return true;
+						return (showReadableFile);
 					}
-					return (sel.isFile() || sel.isDirectory())
-							&& !sel.isHidden();
+					return true;
+//					return (sel.isFile() || sel.isDirectory())
+//							&& !sel.isHidden();
 				}//public boolean accept(File dir, String filename) {
 			};//FilenameFilter filter = new FilenameFilter() {
 
