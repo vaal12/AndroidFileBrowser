@@ -58,6 +58,7 @@ To get result overrider onActivityResult method of calling Activity for example 
 Features
 At the moment only pick directory activity is provided, though more options are planned to be added in the future.
 	
+Sometimes it is necessary to run Project/Clean for both this project and project(s) which rely on this to regenerate correct files/jars.
 	
 License
 Licensed under the Apache License, Version 2.0 (the "License");
