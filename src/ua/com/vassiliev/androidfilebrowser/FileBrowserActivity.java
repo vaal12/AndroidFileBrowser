@@ -427,7 +427,6 @@ public class FileBrowserActivity extends Activity {
 	}
 	
 	private class ItemFileNameComparator implements Comparator<Item> {
-		@Override
 		public int compare(Item lhs, Item rhs) {
 			return lhs.file.toLowerCase().compareTo(rhs.file.toLowerCase());
 		}
