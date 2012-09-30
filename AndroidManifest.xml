@@ -22,7 +22,8 @@
         <!-- This is necessary for file browser -->
         <activity
             android:name="ua.com.vassiliev.androidfilebrowser.FileBrowserActivity"
-            android:label="File browser" >
+            android:label="File browser" 
+            android:configChanges="orientation|keyboardHidden">
             <intent-filter>
                 <action android:name="ua.com.vassiliev.androidfilebrowser.SELECT_DIRECTORY_ACTION"></action>
             </intent-filter>

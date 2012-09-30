@@ -18,6 +18,7 @@ import java.util.Collections;
 //Android imports 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 //import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 
 //Import of resources file for file browser
 import ua.com.vassiliev.androidfilebrowser.R;
+
 
 
 public class FileBrowserActivity extends Activity {
@@ -439,5 +441,19 @@ public class FileBrowserActivity extends Activity {
 		}
 		
 	}//private class ItemComparator implements Comparator<Item> {
+	
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			Log.d(LOGTAG, "ORIENTATION_LANDSCAPE");
+		} else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+			Log.d(LOGTAG, "ORIENTATION_PORTRAIT");
+		}
+		// Layout apparently changes itself, only have to provide good onMeasure
+		// in custom components
+		//TODO: check with keyboard
+		// if(newConfig.keyboard == Configuration.KEYBOARDHIDDEN_YES)
+	}
 
 }
