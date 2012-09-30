@@ -76,6 +76,8 @@ public class FileBrowserActivity extends Activity {
 	
 	private boolean showHiddenFilesAndDirs = true;
 	
+	private boolean directoryShownIsEmpty = false;
+	
 	//Action constants
 	private static int currentAction = -1;
 	private static final int SELECT_DIRECTORY = 1;
@@ -263,10 +265,13 @@ public class FileBrowserActivity extends Activity {
 ////							adapter.notifyDataSetChanged();
 ////							Log.d(TAG, path.getAbsolutePath());
 //						}
-						// File picked
+						// File picked or an empty directory message clicked
 						else {
-							Log.d(LOGTAG, "File selected:"+chosenFile);
-							returnFileFinishActivity(sel.getAbsolutePath());
+							Log.d("item clicked");
+							if(!directoryShownIsEmpty) {
+								Log.d(LOGTAG, "File selected:"+chosenFile);
+								returnFileFinishActivity(sel.getAbsolutePath());
+							}
 						}
 						//Log.d(TAG, "onClick finished");
 					}//public void onClick(DialogInterface dialog, int which) {
@@ -321,6 +326,7 @@ public class FileBrowserActivity extends Activity {
 			};//FilenameFilter filter = new FilenameFilter() {
 
 			String[] fList = path.list(filter);
+			this.directoryShownIsEmpty = false;
 			for (int i = 0; i < fList.length; i++) {
 				
 				// Convert into file path
@@ -357,6 +363,7 @@ public class FileBrowserActivity extends Activity {
 			}
 			if(fileList.size()==0) {
 				Log.d(LOGTAG, "This directory is empty");
+				this.directoryShownIsEmpty = true;
 				fileList.add(0, 
 						new Item("Directory is empty", -1, true));
 			}
