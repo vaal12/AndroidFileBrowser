@@ -175,7 +175,7 @@ public class FileBrowserActivity extends Activity {
 			});//upDirButton.setOnClickListener(
 		
 		Button selectFolderButton = (Button)this.findViewById(R.id.selectCurrentDirectoryButton);
-		if(currentAction == this.SELECT_DIRECTORY) {
+		if(currentAction == FileBrowserActivity.SELECT_DIRECTORY) {
 			selectFolderButton.setOnClickListener(
 				new OnClickListener() {
 					public void onClick(View v) {
@@ -183,7 +183,7 @@ public class FileBrowserActivity extends Activity {
 						returnDirectoryFinishActivity();
 					}
 				});//upDirButton.setOnClickListener(
-		} else {//if(currentAction == this.SELECT_DIRECTORY) {
+		} else {//if(currentAction == FileBrowserActivity.SELECT_DIRECTORY) {
 			selectFolderButton.setVisibility(View.GONE);
 //			((TextView)this.findViewById(
 //					R.id.currentDirectoryTextView)).setVisibility(View.GONE);
