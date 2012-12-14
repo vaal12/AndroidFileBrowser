@@ -17,43 +17,48 @@ To use the component in your project, you would need to copy the following (to t
 Change line 37 (import of ua.com.vassiliev.androidfilebrowser.R) to the R file of your project, so resources you copied would be available for the FileBrowser.
 
 To call the activity you do it as alwasy (see AndroidFileBrowserExampleActivity.java):
-				Intent fileExploreIntent = new Intent(
-    					ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.INTENT_ACTION_SELECT_DIR,
-        				null,
-        				activityForButton,
-        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.class
-        				);
-//        		fileExploreIntent.putExtra(
-//        				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.startDirectoryParameter, 
-//        				"/sdcard"
-//        				);//Here you can add optional start directory parameter, and file browser will start from that directory.
-        		startActivityForResult(
-        				fileExploreIntent,
-        				REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL
-        				);
+```
+   Intent fileExploreIntent = new Intent(
+   	ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.INTENT_ACTION_SELECT_DIR,
+   	null,
+        activityForButton,
+        ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.class
+    );
+//  fileExploreIntent.putExtra(
+//  	ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.startDirectoryParameter, 
+//      "/sdcard"
+//  );//Here you can add optional start directory parameter, and file browser will start from that directory.
+    startActivityForResult(
+    	fileExploreIntent,
+    	REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL
+    );
+```
 
 To get result overrider onActivityResult method of calling Activity for example (from AndroidFileBrowserExampleActivity.java):
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		if (requestCode == REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL) {
+```
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	// TODO Auto-generated method stub
+	if (requestCode == REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL) {
         	if(resultCode == this.RESULT_OK) {
         		String newDir = data.getStringExtra(
         				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.returnDirectoryParameter);
         		Toast.makeText(
-        				this, 
-        				"Received path from file browser:"+newDir, 
-        				Toast.LENGTH_LONG).show(); 
-	        	
+        			this, 
+        			"Received path from file browser:"+newDir, 
+        			Toast.LENGTH_LONG
+        		).show(); 
         	} else {//if(resultCode == this.RESULT_OK) {
         		Toast.makeText(
-        				this, 
-        				"Received NO result from file browser",
-        				Toast.LENGTH_LONG).show(); 
+       				this, 
+       				"Received NO result from file browser",
+       				Toast.LENGTH_LONG)
+       			.show(); 
         	}//END } else {//if(resultCode == this.RESULT_OK) {
         }//if (requestCode == REQUEST_CODE_PICK_FILE_TO_SAVE_INTERNAL) {
 		super.onActivityResult(requestCode, resultCode, data);
-	}
+}
+```
 	
 Features
 At the moment only pick directory activity is provided, though more options are planned to be added in the future.
