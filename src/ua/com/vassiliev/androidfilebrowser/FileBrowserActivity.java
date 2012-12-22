@@ -10,35 +10,38 @@ package ua.com.vassiliev.androidfilebrowser;
 //General Java imports 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Collections;
 
-//Android imports 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-//import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
+//Android imports 
+//import android.content.res.ColorStateList;
 //Import of resources file for file browser
-import ua.com.vassiliev.androidfilebrowser.R;
 
 
 
@@ -72,6 +75,7 @@ public class FileBrowserActivity extends Activity {
 	private List<Item> fileList = new ArrayList<Item>();
 	private File path = null;
 	private String chosenFile;
+
 	//private static final int DIALOG_LOAD_FILE = 1000;
 
 	ArrayAdapter<Item> adapter;
@@ -143,8 +147,8 @@ public class FileBrowserActivity extends Activity {
 				path = Environment.getExternalStorageDirectory();
 			else
 				path = new File("/");
-		}//if(this.path==null) {//No or invalid directory supplied in intent parameter
-	}//private void setInitialDirectory() {
+		}
+	}
 	
 	
 	private void parceDirectoryPath() {
@@ -162,7 +166,7 @@ public class FileBrowserActivity extends Activity {
 	}
 	
 	private void initializeButtons() {
-		Button upDirButton = (Button)this.findViewById(R.id.upDirectoryButton);
+		ImageButton upDirButton = (ImageButton)this.findViewById(R.id.upDirectoryButton);
 		upDirButton.setOnClickListener(
 			new OnClickListener() {
 				public void onClick(View v) {
@@ -183,12 +187,25 @@ public class FileBrowserActivity extends Activity {
 						returnDirectoryFinishActivity();
 					}
 				});//upDirButton.setOnClickListener(
-		} else {//if(currentAction == FileBrowserActivity.SELECT_DIRECTORY) {
+		} else {//if(currentAction == this.SELECT_DIRECTORY) {
 			selectFolderButton.setVisibility(View.GONE);
-//			((TextView)this.findViewById(
-//					R.id.currentDirectoryTextView)).setVisibility(View.GONE);
-		}//} else {//if(currentAction == this.SELECT_DIRECTORY) {
-	}//private void initializeButtons() {
+			
+		}
+		
+		
+		// new Folder button
+		Button newDirButton = (Button)this.findViewById(R.id.newDirectoryButton);
+		newDirButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				createDirectoryDialog();
+			}
+		});
+		
+		
+		
+		
+	}
 	
 	private void loadDirectoryUp() {
 		// present directory removed from list
@@ -205,6 +222,64 @@ public class FileBrowserActivity extends Activity {
 //		}
 	}
 	
+	private void createDirectoryDialog(){
+		
+		
+		// inflate layout of AlertDialog content (with edit text)
+		LayoutInflater li = LayoutInflater.from(this);
+		View promptsView = li.inflate(R.layout.prompts_holo, null);
+		final EditText etNewName = (EditText)promptsView.findViewById(R.id.editTextDialogUserInput);
+		etNewName.setText(getString(R.string.default_directoryname)); // set directory name to some default value
+		etNewName.setSelectAllOnFocus(true);
+		
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setView(promptsView);
+		builder.setCancelable(true)
+				.setMessage(R.string.alert_chooseName)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						String tempText = etNewName.getText().toString();
+						if (tempText.equals("")) {
+							createDirectoryDialog();
+							dialog.cancel();
+						}else{
+							// create directory and load new views
+							createNewDirectory(tempText);
+						}
+					}
+				})
+				.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+						
+					}
+				});
+		builder.create().show();
+		
+	}
+	
+	private void createNewDirectory(String name){
+		try{
+		String newPath = path.getAbsolutePath() + "/" + name;
+		File directory = new File(newPath);
+		directory.mkdir();
+
+		path = directory;
+		pathDirsList.add(path.getAbsolutePath());
+		loadFileList();
+		adapter.notifyDataSetChanged();
+		updateCurrentDirectoryTextView();
+		//fileList.clear();
+		
+		}catch(NullPointerException e){
+			e.printStackTrace();
+		}
+		
+		
+	}
 	private void updateCurrentDirectoryTextView() {
 		int i=0;
 		String curDirString = "";
@@ -213,10 +288,10 @@ public class FileBrowserActivity extends Activity {
 			i++;
 		}
 		if(pathDirsList.size()==0) {
-			((Button)this.findViewById(R.id.upDirectoryButton)).setEnabled(false);
+			((ImageButton)this.findViewById(R.id.upDirectoryButton)).setEnabled(false);
 			curDirString = "/";
 		}
-		else ((Button)this.findViewById(R.id.upDirectoryButton)).setEnabled(true);
+		else ((ImageButton)this.findViewById(R.id.upDirectoryButton)).setEnabled(true);
 		
 		//Log.d(TAG, "Will set curr dir to:"+curDirString);
 		((TextView)this.findViewById(
@@ -287,6 +362,7 @@ public class FileBrowserActivity extends Activity {
 				returnDirectoryParameter, 
 				path.getAbsolutePath()
 		);
+		Log.d(LOGTAG, "returning path: "+path.getAbsolutePath());
 		this.setResult(RESULT_OK, retIntent);
 		this.finish();
 	}//END private void returnDirectoryFinishActivity() {
