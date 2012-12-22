@@ -3,5 +3,9 @@
 
     <string name="hello">AndroidFileBrowserExampleActivity</string>
     <string name="app_name">Android File Browser Example</string>
+    <string name="alert_chooseName">Choose a directory name</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="default_directoryname">Unnamed</string>
 
 </resources>
