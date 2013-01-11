@@ -10,20 +10,31 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <Button
+        <ImageButton
             android:id="@+id/upDirectoryButton"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/dir_up"
-            android:text="Up" />
+            android:layout_weight="0.5"
+            android:src="@drawable/dir_up"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/newDirectoryButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="+"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+             />
 
         <Button
             android:id="@+id/selectCurrentDirectoryButton"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Select" />
+            android:text="Select"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
     <TextView
