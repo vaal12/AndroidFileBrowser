@@ -7,9 +7,9 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        
-        android:text="@string/hello" />
-
+        android:text="@string/hello"
+        />
+    
     <Button
         android:id="@+id/startFileBrowserButtonID"
         android:layout_width="fill_parent"

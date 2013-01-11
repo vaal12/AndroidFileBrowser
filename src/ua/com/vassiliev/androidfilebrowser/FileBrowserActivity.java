@@ -255,7 +255,7 @@ public class FileBrowserActivity extends Activity {
 			directory.mkdir();
 
 			path = directory;
-			pathDirsList.add(path.getAbsolutePath());
+			parseDirectoryPath();
 			loadFileList();
 			adapter.notifyDataSetChanged();
 			updateCurrentDirectoryTextView();
