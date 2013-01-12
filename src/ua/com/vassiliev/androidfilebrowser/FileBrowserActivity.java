@@ -269,7 +269,7 @@ public class FileBrowserActivity extends Activity {
 //						}
 						// File picked or an empty directory message clicked
 						else {
-							Log.d("item clicked");
+							Log.d(LOGTAG,"item clicked");
 							if(!directoryShownIsEmpty) {
 								Log.d(LOGTAG, "File selected:"+chosenFile);
 								returnFileFinishActivity(sel.getAbsolutePath());
