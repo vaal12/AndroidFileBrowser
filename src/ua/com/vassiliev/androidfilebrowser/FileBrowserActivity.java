@@ -190,9 +190,17 @@ public class FileBrowserActivity extends Activity {
 		} else
 			((Button) this.findViewById(R.id.upDirectoryButton))
 					.setEnabled(true);
+		long freeSpace = getFreeSpace(curDirString);
+		String formattedSpaceString = formatBytes(freeSpace);
+		if (freeSpace == 0) {
+			Log.d(LOGTAG, "NO FREE SPACE");
+			File currentDir = new File(curDirString);
+			if(!currentDir.canWrite())
+				formattedSpaceString = "NON Writable";
+		}
 
 		((Button) this.findViewById(R.id.selectCurrentDirectoryButton))
-				.setText("Select\n[" + formatBytes(getFreeSpace(curDirString))
+				.setText("Select\n[" + formattedSpaceString
 						+ "]");
 
 		((TextView) this.findViewById(R.id.currentDirectoryTextView))
