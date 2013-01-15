@@ -25,6 +25,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -85,7 +86,7 @@ public class FileBrowserActivity extends Activity {
 		// Set action for this activity
 		Intent thisInt = this.getIntent();
 		currentAction = SELECT_DIRECTORY;// This would be a default action in
-										// case not set by intent
+											// case not set by intent
 		if (thisInt.getAction().equalsIgnoreCase(INTENT_ACTION_SELECT_FILE)) {
 			Log.d(LOGTAG, "SELECT ACTION - SELECT FILE");
 			currentAction = SELECT_FILE;
@@ -166,7 +167,6 @@ public class FileBrowserActivity extends Activity {
 		}// } else {//if(currentAction == this.SELECT_DIRECTORY) {
 	}// private void initializeButtons() {
 
-	
 	private void loadDirectoryUp() {
 		// present directory removed from list
 		String s = pathDirsList.remove(pathDirsList.size() - 1);
@@ -176,7 +176,6 @@ public class FileBrowserActivity extends Activity {
 		fileList.clear();
 	}
 
-	
 	private void updateCurrentDirectoryTextView() {
 		int i = 0;
 		String curDirString = "";
@@ -192,16 +191,18 @@ public class FileBrowserActivity extends Activity {
 			((Button) this.findViewById(R.id.upDirectoryButton))
 					.setEnabled(true);
 
-		((TextView) this.findViewById(R.id.currentDirectoryTextView))
-				.setText("Current directory:\n" + curDirString);
-	}// private void updateCurrentDirectoryTextView() {
+		((Button) this.findViewById(R.id.selectCurrentDirectoryButton))
+				.setText("Select\n[" + formatBytes(getFreeSpace(curDirString))
+						+ "]");
 
-	
+		((TextView) this.findViewById(R.id.currentDirectoryTextView))
+				.setText("Current directory: " + curDirString);
+	}// END private void updateCurrentDirectoryTextView() {
+
 	private void showToast(String message) {
 		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
 	}
 
-	
 	private void initializeFileListView() {
 		ListView lView = (ListView) this.findViewById(R.id.fileListView);
 		lView.setBackgroundColor(Color.LTGRAY);
@@ -229,19 +230,18 @@ public class FileBrowserActivity extends Activity {
 						showToast("Path does not exist or cannot be read");
 					}// } else {//if(sel.canRead()) {
 				}// if (sel.isDirectory()) {
-				// File picked or an empty directory message clicked
-				else {//if (sel.isDirectory()) {
+					// File picked or an empty directory message clicked
+				else {// if (sel.isDirectory()) {
 					Log.d(LOGTAG, "item clicked");
 					if (!directoryShownIsEmpty) {
 						Log.d(LOGTAG, "File selected:" + chosenFile);
 						returnFileFinishActivity(sel.getAbsolutePath());
 					}
-				}//else {//if (sel.isDirectory()) {
+				}// else {//if (sel.isDirectory()) {
 			}// public void onClick(DialogInterface dialog, int which) {
 		});// lView.setOnClickListener(
 	}// private void initializeFileListView() {
 
-	
 	private void returnDirectoryFinishActivity() {
 		Intent retIntent = new Intent();
 		retIntent.putExtra(returnDirectoryParameter, path.getAbsolutePath());
@@ -275,7 +275,7 @@ public class FileBrowserActivity extends Activity {
 						return (sel.isDirectory() && showReadableFile);
 					}
 					if (currentAction == SELECT_FILE) {
-						
+
 						// If it is a file check the extension if provided
 						if (sel.isFile() && filterFileExtension != null) {
 							return (showReadableFile && sel.getName().endsWith(
@@ -292,8 +292,9 @@ public class FileBrowserActivity extends Activity {
 			for (int i = 0; i < fList.length; i++) {
 				// Convert into file path
 				File sel = new File(path, fList[i]);
-				Log.d(LOGTAG, "File:" + fList[i] + " readable:"
-						+ (Boolean.valueOf(sel.canRead())).toString());
+				Log.d(LOGTAG,
+						"File:" + fList[i] + " readable:"
+								+ (Boolean.valueOf(sel.canRead())).toString());
 				int drawableID = R.drawable.file_icon;
 				boolean canRead = sel.canRead();
 				// Set drawables
@@ -305,9 +306,9 @@ public class FileBrowserActivity extends Activity {
 					}
 				}
 				fileList.add(i, new Item(fList[i], drawableID, canRead));
-			}//for (int i = 0; i < fList.length; i++) {
+			}// for (int i = 0; i < fList.length; i++) {
 			if (fileList.size() == 0) {
-//				Log.d(LOGTAG, "This directory is empty");
+				// Log.d(LOGTAG, "This directory is empty");
 				this.directoryShownIsEmpty = true;
 				fileList.add(0, new Item("Directory is empty", -1, true));
 			} else {// sort non empty list
@@ -335,15 +336,15 @@ public class FileBrowserActivity extends Activity {
 					// If icon == -1, then directory is empty
 					drawableID = fileList.get(position).icon;
 				}
-				textView.setCompoundDrawablesWithIntrinsicBounds(
-						drawableID, 0, 0, 0
-				);
+				textView.setCompoundDrawablesWithIntrinsicBounds(drawableID, 0,
+						0, 0);
 
 				textView.setEllipsize(null);
 
 				// add margin between image and text (support various screen
 				// densities)
-//				int dp5 = (int) (5 * getResources().getDisplayMetrics().density + 0.5f);
+				// int dp5 = (int) (5 *
+				// getResources().getDisplayMetrics().density + 0.5f);
 				int dp3 = (int) (3 * getResources().getDisplayMetrics().density + 0.5f);
 				// TODO: change next line for empty directory, so text will be
 				// centered
@@ -354,7 +355,6 @@ public class FileBrowserActivity extends Activity {
 		};// adapter = new ArrayAdapter<Item>(this,
 	}// private createFileListAdapter(){
 
-	
 	private class Item {
 		public String file;
 		public int icon;
@@ -369,16 +369,14 @@ public class FileBrowserActivity extends Activity {
 		public String toString() {
 			return file;
 		}
-	}//END private class Item {
+	}// END private class Item {
 
-	
 	private class ItemFileNameComparator implements Comparator<Item> {
 		public int compare(Item lhs, Item rhs) {
 			return lhs.file.toLowerCase().compareTo(rhs.file.toLowerCase());
 		}
 	}
 
-	
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -390,7 +388,37 @@ public class FileBrowserActivity extends Activity {
 		// in custom components
 		// TODO: check with keyboard
 		// if(newConfig.keyboard == Configuration.KEYBOARDHIDDEN_YES)
-	}//END public void onConfigurationChanged(Configuration newConfig) {
-	
-	
-}//END public class FileBrowserActivity extends Activity {
+	}// END public void onConfigurationChanged(Configuration newConfig) {
+
+	public static long getFreeSpace(String path) {
+		StatFs stat = new StatFs(path);
+		long availSize = (long) stat.getAvailableBlocks()
+				* (long) stat.getBlockSize();
+		return availSize;
+	}// END public static long getFreeSpace(String path) {
+
+	public static String formatBytes(long bytes) {
+		// TODO: add flag to which part is needed (e.g. GB, MB, KB or bytes)
+		String retStr = "";
+		// One binary gigabyte equals 1,073,741,824 bytes.
+		if (bytes > 1073741824) {// Add GB
+			long gbs = bytes / 1073741824;
+			retStr += (new Long(gbs)).toString() + "GB ";
+			bytes = bytes - (gbs * 1073741824);
+		}
+		// One MB - 1048576 bytes
+		if (bytes > 1048576) {// Add GB
+			long mbs = bytes / 1048576;
+			retStr += (new Long(mbs)).toString() + "MB ";
+			bytes = bytes - (mbs * 1048576);
+		}
+		if (bytes > 1024) {
+			long kbs = bytes / 1024;
+			retStr += (new Long(kbs)).toString() + "KB";
+			bytes = bytes - (kbs * 1024);
+		} else
+			retStr += (new Long(bytes)).toString() + " bytes";
+		return retStr;
+	}// public static String formatBytes(long bytes){
+
+}// END public class FileBrowserActivity extends Activity {
