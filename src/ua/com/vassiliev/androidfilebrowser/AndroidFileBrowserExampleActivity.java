@@ -3,7 +3,7 @@ package ua.com.vassiliev.androidfilebrowser;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
+//import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -97,7 +97,7 @@ public class AndroidFileBrowserExampleActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_CODE_PICK_DIR) {
-        	if(resultCode == this.RESULT_OK) {
+        	if(resultCode == RESULT_OK) {
         		String newDir = data.getStringExtra(
         				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.returnDirectoryParameter);
         		Toast.makeText(
@@ -114,7 +114,7 @@ public class AndroidFileBrowserExampleActivity extends Activity {
         }//if (requestCode == REQUEST_CODE_PICK_DIR) {
 		
 		if (requestCode == REQUEST_CODE_PICK_FILE) {
-        	if(resultCode == this.RESULT_OK) {
+        	if(resultCode == RESULT_OK) {
         		String newFile = data.getStringExtra(
         				ua.com.vassiliev.androidfilebrowser.FileBrowserActivity.returnFileParameter);
         		Toast.makeText(
