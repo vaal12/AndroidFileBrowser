@@ -286,7 +286,10 @@ public class FileBrowserActivity extends Activity {
 
 						// If it is a file check the extension if provided
 						if (sel.isFile() && filterFileExtension != null) {
-							return (showReadableFile && sel.getName().endsWith(
+							// Compare filterFileExtension in lower case since only one extension
+							// can be passed in, this catches the case of a user having a file that
+							// has an extension that is capitalized for some weird reason
+							return (showReadableFile && sel.getName().toLowerCase().endsWith(
 									filterFileExtension));
 						}
 						return (showReadableFile);
